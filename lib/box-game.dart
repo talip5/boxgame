@@ -1,8 +1,9 @@
 import 'dart:ui';
+import 'package:flame/gestures.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flame/game.dart';
 
-class BoxGame extends Game {
+class BoxGame extends Game with TapDetector{
 
   Size screenSize;
   bool hasWon = false;
@@ -39,16 +40,18 @@ class BoxGame extends Game {
     super.resize(size);
   }
 
-  void onTapDown(TapDownDetails d) {
-    double screenCenterX = screenSize.width / 2;
-    double screenCenterY = screenSize.height / 2;
-    if (d.globalPosition.dx >= screenCenterX - 75
-        && d.globalPosition.dx <= screenCenterX + 75
-        && d.globalPosition.dy >= screenCenterY - 75
-        && d.globalPosition.dy <= screenCenterY + 75
-    ) {
-      //hasWon = true;
-      hasWon=!hasWon;
-    }
+@override
+  void onTapDown(TapDownDetails details) {
+  double screenCenterX = screenSize.width / 2;
+  double screenCenterY = screenSize.height / 2;
+  if (details.globalPosition.dx >= screenCenterX - 75
+      && details.globalPosition.dx <= screenCenterX + 75
+      && details.globalPosition.dy >= screenCenterY - 75
+      && details.globalPosition.dy <= screenCenterY + 75
+  ) {
+    //hasWon = true;
+    hasWon=!hasWon;
+  }
+    super.onTapDown(details);
   }
 }

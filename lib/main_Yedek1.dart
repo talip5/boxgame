@@ -12,5 +12,8 @@ void main() async{
   await Flame.util.setLandscape();
 
   BoxGame game = BoxGame();
-   runApp(game.widget);
- }
+  TapGestureRecognizer tapper = TapGestureRecognizer();
+  tapper.onTapDown = game.onTapDown;
+  runApp(game.widget);
+  Flame.util.addGestureRecognizer(tapper);
+}
