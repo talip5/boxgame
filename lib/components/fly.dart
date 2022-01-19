@@ -1,10 +1,12 @@
 import 'package:boxgame/box-game.dart';
 import 'dart:ui';
 
-class Fly{
+class Fly {
 
   Rect flyRect;
   Paint flyPaint;
+  bool isDead = false;
+  bool isOffScreen = false;
 
   BoxGame game;
 
@@ -21,7 +23,17 @@ class Fly{
 
   @override
   void update(double t) {
-    // TODO: implement update
+    if (isDead) {
+      flyRect = flyRect.translate(0, game.tileSize * 12 * t);
+      if (flyRect.top > game.screenSize.height) {
+        isOffScreen = true;
+      }
+    }
+  }
 
+  void onTapDown() {
+    isDead = true;
+    flyPaint.color = Color(0xffff4757);
+    game.spawnFly();
   }
 }

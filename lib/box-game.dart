@@ -48,9 +48,8 @@ class BoxGame extends Game with TapDetector{
 
   void update(double t) {
     flies.forEach((Fly fly) => fly.update(t));
-    //xWhite=xWhite+ 20 * t;
-    //_fly1=Fly1(this, xWhite, 150);
-    //_fly1.update(t);
+    _fly1.update(t);
+    flies.removeWhere((Fly fly) => fly.isOffScreen);
       }
 
 @override
@@ -59,9 +58,17 @@ class BoxGame extends Game with TapDetector{
     tileSize = screenSize.width / 9;
     super.resize(size);
   }
+
   @override
   void onTapDown(TapDownDetails details) {
-
+    flies.forEach((Fly fly) {
+      if (fly.flyRect.contains(details.globalPosition)) {
+        fly.onTapDown();
+      }
+    });
+    if (_fly1.flyRect1.contains(details.globalPosition)) {
+      _fly1.onTapDown();
+    }
     super.onTapDown(details);
   }
 }

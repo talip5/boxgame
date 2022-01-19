@@ -5,7 +5,7 @@ class Fly1{
 
   Rect flyRect1;
   Paint flyPaint1;
-
+  bool isDead = false;
   BoxGame game;
 
   Fly1(this.game, double x, double y) {
@@ -21,7 +21,13 @@ class Fly1{
 
   @override
   void update(double t) {
-    // TODO: implement update
+    if (isDead) {
+      flyRect1 = flyRect1.translate(0, game.tileSize * 12 * t);
+    }
+  }
 
+  void onTapDown() {
+    isDead = true;
+    flyPaint1.color = Color(0xffffff00);
   }
 }
