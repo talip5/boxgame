@@ -30,6 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
   flame: ^0.29.4
+  shared_preferences: ^0.5.1+2
 
 
 

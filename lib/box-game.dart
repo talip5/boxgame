@@ -23,6 +23,9 @@ import 'package:boxgame/components/credits-button.dart';
 import 'package:boxgame/components/help-button.dart';
 import 'package:boxgame/views/help-view.dart';
 import 'package:boxgame/views/credits-view.dart';
+import 'package:boxgame/components/score-display.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:boxgame/components/highscore-display.dart';
 
 class BoxGame extends Game with TapDetector{
 
@@ -41,8 +44,12 @@ class BoxGame extends Game with TapDetector{
   CreditsButton creditsButton;
   HelpView helpView;
   CreditsView creditsView;
+  int score;
+  ScoreDisplay scoreDisplay;
+  final SharedPreferences storage;
+  HighscoreDisplay highscoreDisplay;
 
-  BoxGame(){
+  BoxGame(this.storage){
     initialize();
   }
 
@@ -58,6 +65,9 @@ class BoxGame extends Game with TapDetector{
     creditsButton = CreditsButton(this);
     helpView = HelpView(this);
     creditsView = CreditsView(this);
+    scoreDisplay = ScoreDisplay(this);
+    score = 0;
+    highscoreDisplay = HighscoreDisplay(this);
   }
 
   void spawnFly() {
@@ -84,6 +94,8 @@ class BoxGame extends Game with TapDetector{
 
   void render(Canvas canvas) {
     _backyard.render(canvas);
+    highscoreDisplay.render(canvas);
+    if (activeView == View.playing) scoreDisplay.render(canvas);
     flies.forEach((Fly fly) => fly.render(canvas));
     if (activeView == View.home) homeView.render(canvas);
     if (activeView == View.home || activeView == View.lost) {
@@ -100,6 +112,7 @@ class BoxGame extends Game with TapDetector{
     flies.forEach((Fly fly) => fly.update(t));
     flies.removeWhere((Fly fly) => fly.isOffScreen);
     spawner.update(t);
+    if (activeView == View.playing) scoreDisplay.update(t);
       }
 
 @override

@@ -1,6 +1,8 @@
 import 'package:boxgame/box-game.dart';
 import 'dart:ui';
 import 'package:flame/sprite.dart';
+import 'package:boxgame/view.dart';
+import 'package:boxgame/components/callout.dart';
 
 class Fly {
 
@@ -12,11 +14,13 @@ class Fly {
   double flyingSpriteIndex = 0;
   BoxGame game;
   Offset targetLocation;
+  Callout callout;
 
   double get speed => game.tileSize * 3;
 
   Fly(this.game) {
     setTargetLocation();
+    callout = Callout(this);
      }
 
   void setTargetLocation() {
@@ -31,6 +35,9 @@ class Fly {
         deadSprite.renderRect(canvas, flyRect.inflate(2));
       } else {
         flyingSprite[flyingSpriteIndex.toInt()].renderRect(canvas, flyRect.inflate(2));
+        if (game.activeView == View.playing) {
+          callout.render(canvas);
+        }
       }
     }
 
@@ -56,10 +63,21 @@ class Fly {
         flyRect = flyRect.shift(toTarget);
         setTargetLocation();
       }
+      callout.update(t);
     }
   }
 
   void onTapDown() {
-    isDead = true;
+    if (!isDead) {
+      isDead = true;
+
+      if (game.activeView == View.playing) {
+        game.score += 1;
+        if (game.score > (game.storage.getInt('highscore') ?? 0)) {
+          game.storage.setInt('highscore', game.score);
+          game.highscoreDisplay.updateHighscore();
+        }
+      }
+    }
   }
 }
